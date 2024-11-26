@@ -76,12 +76,12 @@ adjacent(Row1, Col1, Row2, Col2) :-
 	(Col1 =:= Col2, (Row2 =:= Row1 - 1)).
 
 clearPath(Row1, Col1, Row2, Col2) :-
-	not(opponentAt(R,Col1),
-	not(opponentAt(R2,Col2),
+	not(opponentAt(R,Col1)),
+	not(opponentAt(R2,Col2)),
 	Col1==Col2.
 clearPath(Row1, Col1, Row2, Col2) :-
-	not(opponentAt(Row1,C),
-	not(opponentAt(Row2,C2),
+	not(opponentAt(Row1,C)),
+	not(opponentAt(Row2,C2)),
 	Row1==Row2.
 
     % Check if path is clear of opponents for passing/shooting
