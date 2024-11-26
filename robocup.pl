@@ -64,50 +64,30 @@ validPosition(Row, Col) :-
     numRows(NR), numCols(NC),
     Row >= 0, Row =< NR-1,
     Col >= 0, Col =< NC-1.
+
 % Horizontal or vertical move by 1 step, along with logic to chain the steps in a sequence.
-adjacent(Row1, Col1, Row2, Col2) :-
-	(Row1 =:= Row2, (Col2 =:= Col1 + 1)).
-adjacent(Row1, Col1, Row2, Col2) :-
-	(Row1 =:= Row2, Col2 =:= Col1 - 1).
-adjacent(Row1, Col1, Row2, Col2) :-
-	adjacent(Row1,Col1,Row2,newCol),
-	Row1 =:= Row2, 
- 	Col1 < newCol, 
-  	newCol <= Col2,
-	clearPath(Row1,Col1,Row2,newCol).
-adjacent(Row1, Col1, Row2, Col2) :-
-	adjacent(Row1,Col1,Row2,newCol),
-	Row1 =:= Row2, 
- 	Col1 > newCol
-  	newCol >= Col2,
-	clearPath(Row1,Col1,Row2,newCol).
-
-
-adjacent(Row1, Col1, Row2, Col2) :-
-	(Col1 =:= Col2, (Row2 =:= Row1 + 1)).
-adjacent(Row1, Col1, Row2, Col2) :-
-	(Col1 =:= Col2, (Row2 =:= Row1 - 1)).
-adjacent(Row1, Col1, Row2, Col2) :-
-	adjacent(Row1,Col1,newRow,Col2),
-	Col1 =:= Col2,
- 	Row1 < newRow,
- 	newRow <= Row2,
-	clearPath(Row1,Col1,Row2,newCol).
-adjacent(Row1, Col1, Row2, Col2) :-
-	adjacent(Row1,Col1,newRow,Col2),
-	Col1 =:= Col2, 
- 	Row1 > newRow,
-  	newRow >= Row2,
-	clearPath(Row1,Col1,Row2,newCol).
+adjacent(Row1, Col1, Row2, Col2) :- % Vertical movement across rows.
+    Col1 =:= Col2,
+    abs(Row1 - Row2) =:= 1.
+adjacent(Row1, Col1, Row2, Col2) :- % Horizontal movement across columns.
+    Row1 =:= Row2,
+    abs(Col1 - Col2) =:= 1.
 
 clearPath(Row1, Col1, Row2, Col2) :-
+    % Vertical move
     Col1 == Col2,
-    \+ (opponentAt(R, Col1)),
-    Row1 \= Row2.
+    Row1 \= Row2,
+    \+ (between(min(Row1, Row2), max(Row1, Row2), R), 
+	R \= Row1, R \= Row2, 
+        opponentAt(R, Col1)).
+
 clearPath(Row1, Col1, Row2, Col2) :-
+    % Horizontal move
     Row1 == Row2,
-    \+ (opponentAt(Row1, C)),
-    Col1 \= Col2.
+    Col1 \= Col2,
+    \+ (between(min(Col1, Col2), max(Col1, Col2), C), 
+        C \= Col1, C \= Col2, 
+        opponentAt(Row1, C)).
 
     % Check if path is clear of opponents for passing/shooting
     % Vertical path check
