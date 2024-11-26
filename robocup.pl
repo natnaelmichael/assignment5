@@ -69,13 +69,14 @@ adjacent(Row1, Col1, Row2, Col2) :-
 	(Row1 =:= Row2, (Col2 =:= Col1 + 1)).
 adjacent(Row1, Col1, Row2, Col2) :-
 	(Row1 =:= Row2, Col2 =:= Col1 - 1).
- adjacent(Row1, Col1, Row2, Col2) :-
+adjacent(Row1, Col1, Row2, Col2) :-
 	adjacent(Row1,Col1,Row2,newCol),
 	Row1 =:= Row2, 
  	Col1 < newCol, 
   	newCol <= Col2,
 	clearPath(Row1,Col1,Row2,newCol).
-adjacent(Row1,Col1,Row2,newCol) :-
+adjacent(Row1, Col1, Row2, Col2) :-
+	adjacent(Row1,Col1,Row2,newCol),
 	Row1 =:= Row2, 
  	Col1 > newCol
   	newCol >= Col2,
@@ -86,12 +87,14 @@ adjacent(Row1, Col1, Row2, Col2) :-
 	(Col1 =:= Col2, (Row2 =:= Row1 + 1)).
 adjacent(Row1, Col1, Row2, Col2) :-
 	(Col1 =:= Col2, (Row2 =:= Row1 - 1)).
-adjacent(Row1,Col1,newRow,Col2) :-
+adjacent(Row1, Col1, Row2, Col2) :-
+	adjacent(Row1,Col1,newRow,Col2),
 	Col1 =:= Col2,
  	Row1 < newRow,
  	newRow <= Row2,
 	clearPath(Row1,Col1,Row2,newCol).
-adjacent(Row1,Col1,newRow,Col2) :-
+adjacent(Row1, Col1, Row2, Col2) :-
+	adjacent(Row1,Col1,newRow,Col2),
 	Col1 =:= Col2, 
  	Row1 > newRow,
   	newRow >= Row2,
