@@ -1,0 +1,28 @@
+
+% Enter the names of your group members below.
+% If you only have 2 group members, leave the last space blank
+%
+%%%%%
+%%%%% NAME: 
+%%%%% NAME:
+%%%%% NAME:
+%
+
+%%%%% SECTION: cpu_details
+%%%%% Describe the system you ran your tests on below.
+%%%%% It should include information about the processor (mainly speed), 
+%%%%% amount of RAM, and operator system you ran your tests on.
+
+
+
+%%%%% SECTION: summary
+%%%%% Summarize your results in 5-10 sentences. Describe which states you tested on, 
+%%%%% which ones ran in a reasonable amount of time (and how long they took), and 
+%%%%% how much speedup you saw when using declarative heuristics. Report any other 
+%%%%% interesting behaviour you saw.
+
+
+
+%%%%% SECTION: log
+%%%%% Show the actual queries you ran below, along with the output
+%%%%% This should include runtime and the actual plan found
