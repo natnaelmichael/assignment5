@@ -2,7 +2,7 @@
 % If you only have 2 group members, leave the last space blank
 %
 %%%%%
-%%%%% NAME: 
+%%%%% NAME: Natnael Michael
 %%%%% NAME:
 %%%%% NAME:
 %
