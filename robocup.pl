@@ -75,19 +75,23 @@ adjacent(Row1, Col1, Row2, Col2) :-
 
 clearPath(Row1, Col1, Row2, Col2) :- % Vertical move
     Col1 =:= Col2,
-    min(Row1, Row2, MinRow),
-    max(Row1, Row2, MaxRow),
-    \+ (between(MinRow, MaxRow, R), 
-        R \= Row1, R \= Row2, 
-        opponentAt(R, Col1)).
+    %min(Row1, Row2, MinRow),
+    %max(Row1, Row2, MaxRow),
+    \+ (
+		between(min(Row1, Row2), max(Row1, Row2), R), 
+        	%R \= Row1, R \= Row2, 
+        	opponentAt(R, Col1)
+	).
 
 clearPath(Row1, Col1, Row2, Col2) :- % Horizontal move
     Row1 =:= Row2,
-    min(Col1, Col2, MinCol),
-    max(Col1, Col2, MaxCol),
-    \+ (between(MinCol, MaxCol, C), 
-        C \= Col1, C \= Col2, 
-        opponentAt(Row1, C)).
+    %min(Col1, Col2, MinCol),
+    %max(Col1, Col2, MaxCol),
+    \+ (
+		between(min(Col1, Col2), max(Col1, Col2), C), 
+        	%C \= Col1, C \= Col2, 
+        	opponentAt(Row1, C)
+	).
 
     % Check if path is clear of opponents for passing/shooting
     % Vertical path check
@@ -221,4 +225,3 @@ useless(move(Robot, Row1, Col1, _, Col2), S) :-
     Col1 =:= GoalCol,
     Col2 \= GoalCol,
     clearPath(Row1, Col1, Row1, GoalCol).
-
