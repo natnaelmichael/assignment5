@@ -73,8 +73,7 @@ adjacent(Row1, Col1, Row2, Col2) :- % Horizontal movement across columns.
     Row1 =:= Row2,
     abs(Col1 - Col2) =:= 1.
 
-clearPath(Row1, Col1, Row2, Col2) :-
-    % Vertical move
+clearPath(Row1, Col1, Row2, Col2) :- % Vertical move
     Col1 =:= Col2,
     min(Row1, Row2, MinRow),
     max(Row1, Row2, MaxRow),
@@ -82,8 +81,7 @@ clearPath(Row1, Col1, Row2, Col2) :-
         R \= Row1, R \= Row2, 
         opponentAt(R, Col1)).
 
-clearPath(Row1, Col1, Row2, Col2) :-
-    % Horizontal move
+clearPath(Row1, Col1, Row2, Col2) :- % Horizontal move
     Row1 =:= Row2,
     min(Col1, Col2, MinCol),
     max(Col1, Col2, MaxCol),
