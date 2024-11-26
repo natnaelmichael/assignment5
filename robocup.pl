@@ -64,17 +64,20 @@ validPosition(Row, Col) :-
     numRows(NR), numCols(NC),
     Row >= 0, Row =< NR-1,
     Col >= 0, Col =< NC-1.
-
+% Horizontal or vertical move by 1 step, along with logic to chain the steps in a sequence.
 adjacent(Row1, Col1, Row2, Col2) :-
-    % Horizontal or vertical move by 1 step
 	(Row1 =:= Row2, (Col2 =:= Col1 + 1)).
 adjacent(Row1, Col1, Row2, Col2) :-
 	(Row1 =:= Row2, Col2 =:= Col1 - 1).
 adjacent(Row1,Col1,Row2,newCol) :-
-	(Row1 =:= Row2, (Col1 < newCol < Col2)),
+	Row1 =:= Row2, 
+ 	Col1 < newCol, 
+  	newCol < Col2,
 	clearPath(Row1,Col1,Row2,newCol).
 adjacent(Row1,Col1,Row2,newCol) :-
-	(Row1 =:= Row2, (Col1 > newCol > Col2)),
+	Row1 =:= Row2, 
+ 	Col1 > newCol
+  	newCol > Col2,
 	clearPath(Row1,Col1,Row2,newCol).
 
 
@@ -83,10 +86,14 @@ adjacent(Row1, Col1, Row2, Col2) :-
 adjacent(Row1, Col1, Row2, Col2) :-
 	(Col1 =:= Col2, (Row2 =:= Row1 - 1)).
 adjacent(Row1,Col1,newRow,Col2) :-
-	(Col1 =:= Col2, (Row1 < newRow < Row2)),
+	Col1 =:= Col2,
+ 	Row1 < newRow,
+ 	newRow < Row2,
 	clearPath(Row1,Col1,Row2,newCol).
 adjacent(Row1,Col1,newRow,Col2) :-
-	(Col1 =:= Col2, (Row1 > newRow > Row2)),
+	Col1 =:= Col2, 
+ 	Row1 > newRow,
+  	newRow > Row2,
 	clearPath(Row1,Col1,Row2,newCol).
 
 clearPath(Row1, Col1, Row2, Col2) :-
