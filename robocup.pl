@@ -59,12 +59,6 @@ goal_state(22, S) :- robotLoc(r1, 2, 4, S).
 %%%%% are instantiated by constants before you apply negation to the predicate that 
 %%%%% mentions these variables. 
 
-min(X, Y, Min) :- X =< Y, Min = X.
-min(X, Y, Min) :- X > Y, Min = Y.
-
-max(X, Y, Max) :- X >= Y, Max = X.
-max(X, Y, Max) :- X < Y, Max = Y.
-
 validPosition(Row, Col) :-
     nonvar(Row), nonvar(Col),  % Ensure Row and Col are bound
     numRows(NR), numCols(NC),
