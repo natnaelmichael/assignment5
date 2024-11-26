@@ -59,23 +59,19 @@ goal_state(22, S) :- robotLoc(r1, 2, 4, S).
 %%%%% are instantiated by constants before you apply negation to the predicate that 
 %%%%% mentions these variables. 
 
-between(Lower, Upper, Value) :-
-    Lower =< Value,
-    Value =< Upper.
 
 validPosition(Row, Col) :-
     nonvar(Row), nonvar(Col),  % Ensure Row and Col are bound
     numRows(NR), numCols(NC),
-    Row >= 0, Row =< NR-1,
-    Col >= 0, Col =< NC-1.
+    Row > -1, Row < NR,
+    Col > -1, Col < NC.
 
-% Horizontal or vertical move by 1 step, along with logic to chain the steps in a sequence.
-adjacent(Row1, Col1, Row2, Col2) :- % Vertical movement across rows.
-    Col1 =:= Col2,
-    abs(Row1 - Row2) =:= 1.
-adjacent(Row1, Col1, Row2, Col2) :- % Horizontal movement across columns.
-    Row1 =:= Row2,
-    abs(Col1 - Col2) =:= 1.
+% Adjacent predicate for flexibility
+adjacent(Row1, Col1, Row2, Col2) :- 
+    ground(Row1), ground(Col1), ground(Row2), ground(Col2),
+    (Col1 =:= Col2, abs(Row1 - Row2) =:= 1);
+    (Row1 =:= Row2, abs(Col1 - Col2) =:= 1).
+
 
 clearPath(Row1, Col1, Row2, Col2) :- % Vertical move
     Col1 =:= Col2,
