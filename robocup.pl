@@ -2,7 +2,7 @@
 % If you only have 2 group members, leave the last space blank
 %
 %%%%%
-%%%%% NAME: Natnael Michael
+%%%%% NAME: 
 %%%%% NAME:
 %%%%% NAME:
 %
@@ -60,29 +60,43 @@ goal_state(22, S) :- robotLoc(r1, 2, 4, S).
 %%%%% mentions these variables. 
 
 validPosition(Row, Col) :-
+    nonvar(Row), nonvar(Col),  % Ensure Row and Col are bound
     numRows(NR), numCols(NC),
-    Row >= 1, Row =< NR,
-    Col >= 1, Col =< NC.
+    Row >= 0, Row =< NR-1,
+    Col >= 0, Col =< NC-1.
 
 adjacent(Row1, Col1, Row2, Col2) :-
     % Horizontal or vertical move by 1 step
 	(Row1 =:= Row2, (Col2 =:= Col1 + 1)).
 adjacent(Row1, Col1, Row2, Col2) :-
 	(Row1 =:= Row2, Col2 =:= Col1 - 1).
+adjacent(Row1,Col1,Row2,newCol) :-
+	(Row1 =:= Row2, (Col1 < newCol < Col2)),
+	clearPath(Row1,Col1,Row2,newCol).
+adjacent(Row1,Col1,Row2,newCol) :-
+	(Row1 =:= Row2, (Col1 > newCol > Col2)),
+	clearPath(Row1,Col1,Row2,newCol).
+
 
 adjacent(Row1, Col1, Row2, Col2) :-
 	(Col1 =:= Col2, (Row2 =:= Row1 + 1)).
 adjacent(Row1, Col1, Row2, Col2) :-
 	(Col1 =:= Col2, (Row2 =:= Row1 - 1)).
+adjacent(Row1,Col1,newRow,Col2) :-
+	(Col1 =:= Col2, (Row1 < newRow < Row2)),
+	clearPath(Row1,Col1,Row2,newCol).
+adjacent(Row1,Col1,newRow,Col2) :-
+	(Col1 =:= Col2, (Row1 > newRow > Row2)),
+	clearPath(Row1,Col1,Row2,newCol).
 
 clearPath(Row1, Col1, Row2, Col2) :-
-	not(opponentAt(R,Col1)),
-	not(opponentAt(R2,Col2)),
-	Col1==Col2.
+    Col1 == Col2,
+    \+ (opponentAt(R, Col1)),
+    Row1 \= Row2.
 clearPath(Row1, Col1, Row2, Col2) :-
-	not(opponentAt(Row1,C)),
-	not(opponentAt(Row2,C2)),
-	Row1==Row2.
+    Row1 == Row2,
+    \+ (opponentAt(Row1, C)),
+    Col1 \= Col2.
 
     % Check if path is clear of opponents for passing/shooting
     % Vertical path check
@@ -101,23 +115,9 @@ poss(move(Robot, Row1, Col1, Row2, Col2), S) :-
     robot(Robot),
     validPosition(Row1, Col1),
     validPosition(Row2, Col2),
-    %former robotloc statement.
+    robotLoc(Robot, Row1, Col1, S),
     adjacent(Row1, Col1, Row2, Col2),
-	clearPath(Row1,Col1,Row2,Col2),
-	Row1 == Row2, %Same rows, so move vertical.
-	robotLoc(Robot, Row1, Col2, S).%Now robot located in Col2.
-    % Check destination is clear of robots and opponents
-    %\+ (robotLoc(OtherRobot, Row2, Col2, S)),
-    %\+ opponentAt(Row2, Col2).
-poss(move(Robot, Row1, Col1, Row2, Col2), S) :-
-    robot(Robot),
-    validPosition(Row1, Col1),
-    validPosition(Row2, Col2),
-    %former robotloc statement.
-    adjacent(Row1, Col1, Row2, Col2),
-	clearPath(Row1,Col1,Row2,Col2),
-	Col1 == Col2, %Same columns, so move horizontal.
-	robotLoc(Robot, Row2, Col1, S).%Now robot located in Row2.
+    clearPath(Row1, Col1, Row2, Col2).
 
 % Pass action preconditions
 poss(pass(Robot1, Robot2), S) :-
