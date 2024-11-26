@@ -82,18 +82,18 @@ adjacent(Row1, Col1, Row2, Col2) :- % Horizontal movement across columns.
 clearPath(Row1, Col1, Row2, Col2) :-
     % Vertical move
     Col1 =:= Col2,
-    %Row1 \= Row2,
-    \+ (
-    	between(min(Row1, Row2), max(Row1, Row2), R), 
-	%R \= Row1, R \= Row2, 
-        opponentAt(R, Col1)
-	).
+    min(Row1, Row2, MinRow),
+    max(Row1, Row2, MaxRow),
+    \+ (between(MinRow, MaxRow, R), 
+        R \= Row1, R \= Row2, 
+        opponentAt(R, Col1)).
 
 clearPath(Row1, Col1, Row2, Col2) :-
     % Horizontal move
-    Row1 == Row2,
-    %Col1 \= Col2,
-    \+ (between(min(Col1, Col2), max(Col1, Col2), C), 
+    Row1 =:= Row2,
+    min(Col1, Col2, MinCol),
+    max(Col1, Col2, MaxCol),
+    \+ (between(MinCol, MaxCol, C), 
         C \= Col1, C \= Col2, 
         opponentAt(Row1, C)).
 
