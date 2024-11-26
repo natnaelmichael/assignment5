@@ -59,6 +59,10 @@ goal_state(22, S) :- robotLoc(r1, 2, 4, S).
 %%%%% are instantiated by constants before you apply negation to the predicate that 
 %%%%% mentions these variables. 
 
+between(Lower, Upper, Value) :-
+    Lower =< Value,
+    Value =< Upper.
+
 validPosition(Row, Col) :-
     nonvar(Row), nonvar(Col),  % Ensure Row and Col are bound
     numRows(NR), numCols(NC),
