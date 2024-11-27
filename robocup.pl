@@ -3,7 +3,7 @@
 %
 %%%%%
 %%%%% NAME: Natnael Michael
-%%%%% NAME:
+%%%%% NAME: Subha Tasnim
 %%%%% NAME:
 %
 % Add the required rules in the corresponding sections. 
@@ -120,21 +120,20 @@ poss(move(Robot, Row1, Col1, Row2, Col2), S) :- %Horizontal
     robot(Robot),
     validPosition(Row1, Col1),
     validPosition(Row2, Col2),
-    %adjacent(Row1, Col1, Row1, NewCol),%Fault from =:=
-    clearPath(Row1, Col1, Row1, NewCol),
-	abs(Col2 - NewCol) < abs(Col2 - Col1),
-	robotLoc(Robot, Row1, NewCol, S),
-	poss(move(Robot, Row1, NewCol, Row2, Col2), S).
+	clearPath(Row2, Col1, Row2, Col2),
+	%abs(Col2 - NewCol) < abs(Col2 - Col1),
+	robotLoc(Robot, Row2, Col1, S),
+	poss(move(Robot, Row2, Col2, Row2, Col2), S).
 
 poss(move(Robot, Row1, Col1, Row2, Col2), S) :- %Vertical
     robot(Robot),
     validPosition(Row1, Col1),
     validPosition(Row2, Col2),
-    adjacent(Row1, Col1, newRow, Col1),
-    clearPath(Row1, Col1, newRow, Col1),
+    %adjacent(Row1, Col1, newRow, Col1),
+    clearPath(Row1, Col2, Row2, Col2),
 	abs(Row2 - newRow) < abs(Row2 - Row1),
-	robotLoc(Robot, newRow, Col1, S),
-	poss(move(Robot, newRow, Col1, Row2, Col2), S).
+	robotLoc(Robot, Row1, Col2, S),
+	poss(move(Robot, Row1, Col2, Row2, Col2), S).
 
 
 % Pass action preconditions
