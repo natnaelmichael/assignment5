@@ -105,14 +105,37 @@ clearPath(Row1, Col1, Row2, Col2) :- % Horizontal move
      %MaxCol is max(Col1, Col2),
      %\+ (between(MinCol, MaxCol, C), opponentAt(Row1, C))).
 
-% Move action preconditions
-poss(move(Robot, Row1, Col1, Row2, Col2), S) :-
+% Move action preconditions, with a way to link movements.
+poss(move(Robot, Row1, Col1, Row2, Col2), S) :- %Base case when adjacent.
     robot(Robot),
     validPosition(Row1, Col1),
     validPosition(Row2, Col2),
     robotLoc(Robot, Row1, Col1, S),
     adjacent(Row1, Col1, Row2, Col2),
     clearPath(Row1, Col1, Row2, Col2).
+
+poss(move(Robot, Row1, Col1, Row2, Col2), S) :- %Horizontal
+    robot(Robot),
+    validPosition(Row1, Col1),
+    validPosition(Row2, Col2),
+    robotLoc(Robot, Row1, Col1, S),
+    adjacent(Row1, Col1, Row1, newCol2), newCol2 \= Col2,
+    clearPath(Row1, Col1, Row1, newCol2),
+	abs(Col2 - newCol2) < abs(Col2 - Col1),
+	robotLoc(Robot, Row1, newCol2, S),
+	poss(move(Robot, Row1, newCol2, Row2, Col2), S).
+
+poss(move(Robot, Row1, Col1, Row2, Col2), S) :- %Vertical
+    robot(Robot),
+    validPosition(Row1, Col1),
+    validPosition(Row2, Col2),
+    robotLoc(Robot, Row1, Col1, S),
+    adjacent(Row1, Col1, newRow2, Col1), newRow2 \= Row2,
+    clearPath(Row1, Col1, newRow2, Col1),
+	abs(Row2 - newRow2) < abs(Row2 - Row1),
+	robotLoc(Robot, Row1, newCol2, S),
+	poss(move(Robot, newRow2, Col1, Row2, Col2), S).
+
 
 % Pass action preconditions
 poss(pass(Robot1, Robot2), S) :-
