@@ -67,10 +67,11 @@ validPosition(Row, Col) :-
     Col > -1, Col < NC.
 
 % Adjacent predicate for flexibility
+%ground(Row1), ground(Col1), ground(Row2), ground(Col2),
 adjacent(Row1, Col1, Row2, Col2) :- 
-    %ground(Row1), ground(Col1), ground(Row2), ground(Col2),
-    (Col1 =:= Col2, abs(Row1 - Row2) =:= 1);
-    (Row1 =:= Row2, abs(Col1 - Col2) =:= 1).
+    Col2 =:= Col1, abs(Row1 - Row2) =:= 1.
+adjacent(Row1, Col1, Row2, Col2) :- 
+    Row1 =:= Row2, abs(Col1 - Col2) =:= 1.
 
 
 clearPath(Row1, Col1, Row2, Col2) :- % Vertical move
@@ -78,7 +79,7 @@ clearPath(Row1, Col1, Row2, Col2) :- % Vertical move
     min(Row1, Row2, MinRow),
     max(Row1, Row2, MaxRow),
     \+ (
-		between(MinRow, MaxRow, R), 
+		between(MinRow,MaxRow,1,R), 
         	%R \= Row1, R \= Row2, 
         	opponentAt(R, Col1)
 	).
@@ -88,7 +89,7 @@ clearPath(Row1, Col1, Row2, Col2) :- % Horizontal move
     min(Col1, Col2, MinCol),
     max(Col1, Col2, MaxCol),
     \+ (
-		between(MinCol, MaxCol, C), 
+		between(MinCol,MaxCol,1,C), 
         	%C \= Col1, C \= Col2, 
         	opponentAt(Row1, C)
 	).
@@ -110,31 +111,30 @@ poss(move(Robot, Row1, Col1, Row2, Col2), S) :- %Base case when adjacent.
     robot(Robot),
     validPosition(Row1, Col1),
     validPosition(Row2, Col2),
-    robotLoc(Robot, Row1, Col1, S),
     adjacent(Row1, Col1, Row2, Col2),
-    clearPath(Row1, Col1, Row2, Col2).
+    clearPath(Row1, Col1, Row2, Col2),
+	robotLoc(Robot, Row2, Col2, S).
+
 
 poss(move(Robot, Row1, Col1, Row2, Col2), S) :- %Horizontal
     robot(Robot),
     validPosition(Row1, Col1),
     validPosition(Row2, Col2),
-    robotLoc(Robot, Row1, Col1, S),
-    adjacent(Row1, Col1, Row1, newCol2), newCol2 \= Col2,
-    clearPath(Row1, Col1, Row1, newCol2),
-	abs(Col2 - newCol2) < abs(Col2 - Col1),
-	robotLoc(Robot, Row1, newCol2, S),
-	poss(move(Robot, Row1, newCol2, Row2, Col2), S).
+    %adjacent(Row1, Col1, Row1, NewCol),%Fault from =:=
+    clearPath(Row1, Col1, Row1, NewCol),
+	abs(Col2 - NewCol) < abs(Col2 - Col1),
+	robotLoc(Robot, Row1, NewCol, S),
+	poss(move(Robot, Row1, NewCol, Row2, Col2), S).
 
 poss(move(Robot, Row1, Col1, Row2, Col2), S) :- %Vertical
     robot(Robot),
     validPosition(Row1, Col1),
     validPosition(Row2, Col2),
-    robotLoc(Robot, Row1, Col1, S),
-    adjacent(Row1, Col1, newRow2, Col1), newRow2 \= Row2,
-    clearPath(Row1, Col1, newRow2, Col1),
-	abs(Row2 - newRow2) < abs(Row2 - Row1),
-	robotLoc(Robot, Row1, newCol2, S),
-	poss(move(Robot, newRow2, Col1, Row2, Col2), S).
+    adjacent(Row1, Col1, newRow, Col1),
+    clearPath(Row1, Col1, newRow, Col1),
+	abs(Row2 - newRow) < abs(Row2 - Row1),
+	robotLoc(Robot, newRow, Col1, S),
+	poss(move(Robot, newRow, Col1, Row2, Col2), S).
 
 
 % Pass action preconditions
