@@ -75,10 +75,10 @@ adjacent(Row1, Col1, Row2, Col2) :-
 
 clearPath(Row1, Col1, Row2, Col2) :- % Vertical move
     Col1 =:= Col2,
-    %min(Row1, Row2, MinRow),
-    %max(Row1, Row2, MaxRow),
+    min(Row1, Row2, MinRow),
+    max(Row1, Row2, MaxRow),
     \+ (
-		between(min(Row1, Row2), max(Row1, Row2), R), 
+		between(MinRow, MaxRow, R), 
         	%R \= Row1, R \= Row2, 
         	opponentAt(R, Col1)
 	).
